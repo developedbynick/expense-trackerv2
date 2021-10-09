@@ -1,19 +1,14 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import Container from '../components/Container'
 import Fonts from '../constants/Fonts'
+import Form from '../components/newTransactions/Form'
 
 
-// Mini-components.
-const RenderNewTransactionHeader = () => {
-    return <View style={{ justifyContent: 'center', alignItems: 'center', height: '20%', }}>
-        <Text style={{ color: 'white', fontFamily: Fonts.bold, fontSize: 30, textAlign: 'center' }}>New Transaction</Text>
-    </View>
-}
 const NewTransaction = () => {
     return (
         <Container>
-            <RenderNewTransactionHeader />
+            <Form />
         </Container>
     )
 }

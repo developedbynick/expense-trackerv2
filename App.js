@@ -26,7 +26,8 @@ export default function App() {
           headerStyle: { backgroundColor: '#111' },
           headerTitleStyle: { fontFamily: Fonts.semiBold, color: 'white' },
           headerShadowVisible: false,
-          headerTintColor: '#fff'
+          headerTintColor: '#fff',
+          animation: 'fade'
         }}>
           <Stack.Screen options={{ headerShown: false, }} name="Home" component={Home} />
           <Stack.Screen name="New Transaction" component={NewTransaction} />

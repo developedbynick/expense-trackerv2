@@ -1,8 +1,6 @@
 class Transaction {
-    constructor(title, iconComponent, iconName) {
+    constructor(title,) {
         this.title = title;
-        this.iconComponent = iconComponent;
-        this.iconName = iconName;
     }
 }
 

@@ -12,30 +12,32 @@ const renderSummaryAndAction = () => {
     const { transactions } = useSelector((state => state))
     const marginRight = useRef(new Animated.Value(5)).current;
     const navigation = useNavigation()
-    const handleAddNewTransactions = () => {
+    const handleAddNewTransactions = (callback = () => { }) => {
         Animated.timing(marginRight, {
             toValue: 8,
             duration: 100,
             useNativeDriver: false,
-        }).start(() => {
-            navigation.navigate('New Transaction');
-            Animated.timing(marginRight, {
-                duration: 100,
-                toValue: 5,
-                useNativeDriver: false
-            })
-        })
+        }).start(callback)
+    }
+    const handleOnPressOut = () => {
+        Animated.timing(marginRight, {
+            toValue: 5,
+            duration: 100,
+            useNativeDriver: false
+        }).start()
     }
     return <View style={styles.summaryAndAction}>
         <Text style={{ fontFamily: Fonts.regular, color: 'white', fontSize: 18, letterSpacing: 1, marginBottom: 15 }}>Budgeting Balance</Text>
         <Text style={{ fontFamily: Fonts.bold, color: 'white', fontSize: 35, letterSpacing: 1 }}>${transactions.total}</Text>
-        <TouchableOpacity onPress={handleAddNewTransactions} activeOpacity={0.6} style={{ marginTop: 20 }}>
+        <TouchableOpacity onPress={() => handleAddNewTransactions(() => {
+            navigation.navigate('New Transaction')
+        })} onPressOut={handleOnPressOut} onPressIn={() => handleAddNewTransactions()} activeOpacity={0.6} style={{ marginTop: 20 }}>
             <View style={{ paddingVertical: 8, paddingHorizontal: 20, backgroundColor: '#222', borderRadius: 100, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }} >
                 <Animated.Text style={{ color: 'white', fontFamily: Fonts.semiBold, marginRight, }}>Add New Transactions</Animated.Text>
                 <Ionicons name="arrow-forward" size={20} color={'white'} />
             </View>
         </TouchableOpacity>
-    </View>
+    </View >
 }
 const RenderRecentTransactionsHeader = (props) => {
     // This component renders the recent transactions header.
@@ -49,7 +51,7 @@ const RenderRecentTransactionsHeader = (props) => {
         <Text style={{ fontFamily: Fonts.bold, fontSize: 18, color: 'white' }}>Recent Transactions</Text>
 
         <TouchableOpacity onPress={handleNavigateToAllTransactions} activeOpacity={0.8} style={{ flexDirection: 'row', width: '20%', maxWidth: 150, justifyContent: 'center', }}>
-            <Text style={{ color: '#C0392B', marginRight: 5 }}>See All</Text>
+            <Text style={{ color: '#C0392B', marginRight: 5, fontFamily: Fonts.semiBold, fontSize: 16.5 }}>See All</Text>
             <Ionicons name="arrow-forward" size={20} color="#C0392B" />
         </TouchableOpacity>
     </View>

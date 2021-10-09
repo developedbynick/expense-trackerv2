@@ -1,11 +1,14 @@
 import React from 'react'
-import { StyleSheet, } from 'react-native'
+import { ScrollView, StyleSheet, } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 const Container = (props) => {
     return (
+
         <SafeAreaView {...props} style={[styles.container, props.style]} >
+
             {props.children}
         </SafeAreaView >
+
     )
 }
 

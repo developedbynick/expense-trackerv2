@@ -1,5 +1,5 @@
 export const ACTIONS = {
-
+    ADD_NEW_TRANSACTION: 'ADD_NEW_TRANSACTION'
 }
 
 const initialState = {
