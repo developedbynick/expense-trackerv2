@@ -1,6 +1,6 @@
 import { Picker } from '@react-native-picker/picker'
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, KeyboardAvoidingView, Platform, TouchableOpacity, Alert, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View, KeyboardAvoidingView, Platform, TouchableOpacity, Alert, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native'
 import { TextInput, Checkbox } from 'react-native-paper'
 import Fonts from '../../constants/Fonts';
 import { ACTIONS } from '../../store/reducers/transactions';
@@ -8,8 +8,9 @@ import { useNavigation } from '@react-navigation/native';
 import uuid from 'react-native-uuid'
 import { useDispatch } from 'react-redux';
 import Transaction from '../../model/Transaction';
+import numbro from 'numbro';
 const RenderNewTransactionHeader = () => {
-    return <View style={{ justifyContent: 'center', alignItems: 'center', height: '20%', }}>
+    return <View style={{ justifyContent: 'center', alignItems: 'center', height: '15%', marginBottom: 5 }}>
         <Text style={{ color: 'white', fontFamily: Fonts.bold, fontSize: 30, textAlign: 'center' }}>New Transaction</Text>
     </View>
 }
@@ -20,16 +21,21 @@ const Form = () => {
     const [priceValue, setPriceValue] = useState('')
     const [checked, setChecked] = useState(false)
     const navigation = useNavigation()
+
     const resetValues = () => {
         setName('');
         setPriceValue('')
+        setCategory('')
         setChecked(false)
     }
     const handleAddNewTransaction = () => {
+        // This needs to happen, because the priceValue is in a formatted string(1,000,000). Therefore, javascript does not understand that value, so we remove all the commas, and replace them with empty strings, making them look like (1000000)... replaceAll not available in expo RN
+        const priceValueCopy = priceValue.split(',').join('')
+
         // 1. Validate
-        if (!category && !priceValue && !name) return Alert.alert('Did you fill out the form properly?', 'There is something important missing from an input/s.')
+        if (!category || !priceValue || !name || +priceValueCopy === 0) return Alert.alert('Did you fill out the form properly?', 'There is something important missing from an input/s.')
         // 2. Add New transaction
-        dispatch({ type: ACTIONS.ADD_NEW_TRANSACTION, transaction: new Transaction(category, name, +priceValue, checked ? true : false, uuid.v4()) })
+        dispatch({ type: ACTIONS.ADD_NEW_TRANSACTION, transaction: new Transaction(category, name, +priceValueCopy, checked ? true : false, uuid.v4()) })
         // 3. CLear input fields
         resetValues()
         // 4. Navigate to Home
@@ -37,8 +43,8 @@ const Form = () => {
 
     }
     return (
-        <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.formContainer}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView style={{ flex: 1, paddingHorizontal: 15, }} behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} style={styles.formContainer}>
                 {RenderNewTransactionHeader()}
                 <View style={{ marginBottom: 20 }}>
                     <TextInput value={category} onChangeText={(text) => setCategory(text)} label='Category' placeholderTextColor='white' underlineColor="#C0392B" theme={{
@@ -59,7 +65,7 @@ const Form = () => {
                     }} outlineColor="white" style={{ backgroundColor: '#434343', color: 'white' }} left={<TextInput.Icon color='white' name="id-card" />} />
                 </View>
                 <View style={{ marginBottom: 20 }}>
-                    <TextInput keyboardType='numeric' value={priceValue} onChangeText={(text) => setPriceValue(text.trim())} label='Value ' placeholderTextColor='white' underlineColor="#C0392B" theme={{
+                    <TextInput keyboardType='numeric' value={priceValue ? numbro(priceValue).format({ thousandSeparated: true }) : ''} onChangeText={(text) => setPriceValue(text.trim())} label='Value ' placeholderTextColor='white' underlineColor="#C0392B" theme={{
                         colors: {
                             primary: '#C0392B',
                             placeholder: 'white',
@@ -75,7 +81,7 @@ const Form = () => {
                     <Text style={{ fontFamily: Fonts.bold, color: 'white', fontSize: 17 }}>Add New Transaction!</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
-        </Pressable>
+        </TouchableWithoutFeedback>
     )
 }
 
@@ -83,7 +89,6 @@ export default Form
 
 const styles = StyleSheet.create({
     formContainer: {
-        justifyContent: 'center',
-        flex: 0.7,
+        flex: 1,
     }
 })

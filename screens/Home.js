@@ -1,11 +1,12 @@
-import React, { useRef } from 'react'
-import { Animated, StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { Animated, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert } from 'react-native'
 import Container from '../components/Container';
 import Fonts from '../constants/Fonts'
 import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
 import { ACTIONS } from '../store/reducers/transactions';
+import numbro from 'numbro';
 
 const renderSummaryAndAction = () => {
     // This component renders the so called hero section on the home page. This section contains a title header, budget value, and a way to add new transactions 😉
@@ -28,7 +29,7 @@ const renderSummaryAndAction = () => {
     }
     return <View style={styles.summaryAndAction}>
         <Text style={{ fontFamily: Fonts.regular, color: 'white', fontSize: 18, letterSpacing: 1, marginBottom: 15 }}>Budgeting Balance</Text>
-        <Text style={{ fontFamily: Fonts.bold, color: 'white', fontSize: 35, letterSpacing: 1 }}>${transactions.total}</Text>
+        <Text style={{ fontFamily: Fonts.bold, color: 'white', fontSize: 35, letterSpacing: 1 }}>${numbro(transactions.total).format({ thousandSeparated: true })}</Text>
         <TouchableOpacity onPress={() => handleAddNewTransactions(() => {
             navigation.navigate('New Transaction')
         })} onPressOut={handleOnPressOut} onPressIn={() => handleAddNewTransactions()} activeOpacity={0.6} style={{ marginTop: 20 }}>
@@ -61,9 +62,9 @@ export const RenderRecentTransaction = (props) => {
     const handleDeleteItem = () => {
         dispatch({ type: ACTIONS.REMOVE_TRANSACTION, id: props.item.id })
     }
-    return <TouchableOpacity onLongPress={handleDeleteItem} activeOpacity={0.8} style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: '#434343', borderBottomWidth: 1, }}>
-        <Text style={{ fontSize: 18, color: 'white', fontFamily: Fonts.semiBold }}>{props.item.name}</Text>
-        <Text style={{ fontSize: 18, color: 'white', fontFamily: Fonts.bold, color: props.item.isIncome ? '#2ecc71' : '#C0392B' }}>${props.item.price}</Text>
+    return <TouchableOpacity onLongPress={handleDeleteItem} activeOpacity={0.8} style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: '#434343', borderBottomWidth: 1, marginBottom: 10, paddingVertical: 10, }}>
+        <Text numberOfLines={1} style={{ fontSize: 18, color: 'white', fontFamily: Fonts.semiBold, flex: 1, marginRight: 15 }}>{props.item.name}</Text>
+        <Text numberOfLines={1} style={{ fontSize: 13, color: 'white', fontFamily: Fonts.bold, color: props.item.isIncome ? '#2ecc71' : '#C0392B', }}>$ {numbro(props.item.price).format({ thousandSeparated: true })}</Text>
     </TouchableOpacity>
 
 }
@@ -72,7 +73,7 @@ const RenderRecentTransactionBody = () => {
     const { transactions } = useSelector(state => state);
     if (!transactions.recentTransactions.length) {
         return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Text style={{ fontFamily: Fonts.regular, color: 'white', textAlign: 'center', fontSize: 24, lineHeight: 43 }}>You have no recent transactions.</Text>
+            <Text style={{ fontFamily: Fonts.semiBold, color: 'white', textAlign: 'center', fontSize: 18, lineHeight: 43 }}>You have no recent transactions.</Text>
         </View>
     }
     return <FlatList
@@ -90,6 +91,8 @@ const renderRecentTransactions = () => {
     )
 }
 const Home = () => {
+
+
     return (
         <Container>
             {renderSummaryAndAction()}

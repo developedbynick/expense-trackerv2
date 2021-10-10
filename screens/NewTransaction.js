@@ -1,18 +1,15 @@
 import React from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import Container from '../components/Container'
-import Fonts from '../constants/Fonts'
+import { ScrollView } from 'react-native'
 import Form from '../components/newTransactions/Form'
 
 
 const NewTransaction = () => {
     return (
-        <Container>
+        <ScrollView contentContainerStyle={{ flex: 1, paddingHorizontal: 10 }} style={{ backgroundColor: '#111' }}>
             <Form />
-        </Container>
+        </ScrollView>
     )
 }
 
 export default NewTransaction
 
-const styles = StyleSheet.create({})

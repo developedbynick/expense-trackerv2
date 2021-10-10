@@ -1,6 +1,7 @@
 export const ACTIONS = {
     ADD_NEW_TRANSACTION: 'ADD_NEW_TRANSACTION',
     REMOVE_TRANSACTION: 'REMOVE_TRANSACTION',
+    SET_STATE: 'SET_STATE'
 }
 
 const initialState = {
@@ -34,6 +35,9 @@ const formatState = (state = initialState) => {
 
 export default (state = initialState, action) => {
     let stateToBe = state;
+    if (ACTIONS.SET_STATE === action.type) {
+        return action.state;
+    }
     if (ACTIONS.ADD_NEW_TRANSACTION === action.type) {
         const { transaction } = action;
         let type;
@@ -42,7 +46,7 @@ export default (state = initialState, action) => {
         stateToBe = {
             ...state,
             [type]: [transaction, ...state[type],],
-            recentTransactions: [action.transaction, ...state.recentTransactions,]
+            recentTransactions: [transaction, ...state.recentTransactions,]
         }
     }
     if (ACTIONS.REMOVE_TRANSACTION === action.type) {
