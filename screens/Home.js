@@ -2,10 +2,10 @@ import React, { useRef } from 'react'
 import { Animated, StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native'
 import Container from '../components/Container';
 import Fonts from '../constants/Fonts'
-import { useSelector } from 'react-redux';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
+import { ACTIONS } from '../store/reducers/transactions';
 
 const renderSummaryAndAction = () => {
     // This component renders the so called hero section on the home page. This section contains a title header, budget value, and a way to add new transactions 😉
@@ -47,7 +47,7 @@ const RenderRecentTransactionsHeader = (props) => {
         props.navigation.navigate('All Transactions')
 
     }
-    return <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    return <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 25 }}>
         <Text style={{ fontFamily: Fonts.bold, fontSize: 18, color: 'white' }}>Recent Transactions</Text>
 
         <TouchableOpacity onPress={handleNavigateToAllTransactions} activeOpacity={0.8} style={{ flexDirection: 'row', width: '20%', maxWidth: 150, justifyContent: 'center', }}>
@@ -56,6 +56,18 @@ const RenderRecentTransactionsHeader = (props) => {
         </TouchableOpacity>
     </View>
 }
+export const RenderRecentTransaction = (props) => {
+    const dispatch = useDispatch()
+    const handleDeleteItem = () => {
+        dispatch({ type: ACTIONS.REMOVE_TRANSACTION, id: props.item.id })
+    }
+    return <TouchableOpacity onLongPress={handleDeleteItem} activeOpacity={0.8} style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: '#434343', borderBottomWidth: 1, }}>
+        <Text style={{ fontSize: 18, color: 'white', fontFamily: Fonts.semiBold }}>{props.item.name}</Text>
+        <Text style={{ fontSize: 18, color: 'white', fontFamily: Fonts.bold, color: props.item.isIncome ? '#2ecc71' : '#C0392B' }}>${props.item.price}</Text>
+    </TouchableOpacity>
+
+}
+
 const RenderRecentTransactionBody = () => {
     const { transactions } = useSelector(state => state);
     if (!transactions.recentTransactions.length) {
@@ -63,7 +75,10 @@ const RenderRecentTransactionBody = () => {
             <Text style={{ fontFamily: Fonts.regular, color: 'white', textAlign: 'center', fontSize: 24, lineHeight: 43 }}>You have no recent transactions.</Text>
         </View>
     }
-    return null
+    return <FlatList
+        data={transactions.recentTransactions.slice(0, 10)}
+        renderItem={(item) => <RenderRecentTransaction item={item.item} />}
+    />
 }
 const renderRecentTransactions = () => {
     const navigation = useNavigation()

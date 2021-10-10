@@ -1,6 +1,10 @@
 class Transaction {
-    constructor(title,) {
-        this.title = title;
+    constructor(category, name, price, isIncome, id) {
+        this.category = category;
+        this.name = name;
+        this.price = price
+        this.isIncome = isIncome;
+        this.id = id;
     }
 }
 
