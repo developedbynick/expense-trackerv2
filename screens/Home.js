@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { Animated, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert } from 'react-native'
 import Container from '../components/Container';
 import Fonts from '../constants/Fonts'
