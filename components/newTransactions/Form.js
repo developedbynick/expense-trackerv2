@@ -1,5 +1,4 @@
-import { Picker } from '@react-native-picker/picker'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, KeyboardAvoidingView, Platform, TouchableOpacity, Alert, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native'
 import { TextInput, Checkbox } from 'react-native-paper'
 import Fonts from '../../constants/Fonts';
