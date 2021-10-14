@@ -24,7 +24,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#111111"
       },
-      "package": "com.developedbynick.expensetracker"
+      "package": "com.developedbynick.expensetracker",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-2634754245570033~1005631424"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

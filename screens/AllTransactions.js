@@ -4,12 +4,26 @@ import Container from '../components/Container'
 import { useSelector } from 'react-redux'
 import { RenderRecentTransaction } from './Home'
 import Fonts from '../constants/Fonts';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
+import { ADS_BANNER_ID } from '../constants/AdConfig';
+import { AdMobBanner } from 'expo-ads-admob'
 const AllTransactions = () => {
     const { transactions } = useSelector(state => state)
     const navigation = useNavigation()
     return (
         <Container>
+            <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflow: 'hidden',
+            }}>
+                <AdMobBanner
+                    bannerSize='fullBanner'
+                    adUnitID={ADS_BANNER_ID}
+                    servePersonalizedAds
+                    onDidFailToReceiveAdWithError={(err) => console.log(err)}
+                />
+            </View>
             {transactions.recentTransactions.length > 0 ? <FlatList data={transactions.recentTransactions} renderItem={({ item }) => <RenderRecentTransaction item={item} />} /> : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{
                     textAlign: 'center',

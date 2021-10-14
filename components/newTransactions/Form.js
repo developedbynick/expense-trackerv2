@@ -8,6 +8,8 @@ import uuid from 'react-native-uuid'
 import { useDispatch } from 'react-redux';
 import Transaction from '../../model/Transaction';
 import numbro from 'numbro';
+import { AdMobBanner } from 'expo-ads-admob';
+import { ADS_BANNER_ID } from '../../constants/AdConfig';
 const RenderNewTransactionHeader = () => {
     return <View style={{ justifyContent: 'center', alignItems: 'center', height: '15%', marginBottom: 5 }}>
         <Text style={{ color: 'white', fontFamily: Fonts.bold, fontSize: 30, textAlign: 'center' }}>New Transaction</Text>
@@ -79,6 +81,14 @@ const Form = () => {
                 <TouchableOpacity onPress={handleAddNewTransaction} activeOpacity={0.8} style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30, backgroundColor: '#C0392B', paddingVertical: 10, borderRadius: 5 }}>
                     <Text style={{ fontFamily: Fonts.bold, color: 'white', fontSize: 17 }}>Add New Transaction!</Text>
                 </TouchableOpacity>
+                <View style={{ overflow: 'hidden', marginTop: 10, borderRadius: 5 }} >
+                    <AdMobBanner
+                        bannerSize='fullBanner'
+                        adUnitID={ADS_BANNER_ID}
+                        servePersonalizedAds
+                        onDidFailToReceiveAdWithError={(err) => console.log(err)}
+                    />
+                </View>
             </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
     )

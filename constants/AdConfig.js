@@ -1,0 +1,1 @@
+export const ADS_BANNER_ID = 'ca-app-pub-2634754245570033/7632417829'
